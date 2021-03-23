@@ -3,7 +3,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'paopao',
+    title: '跑跑体育',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -13,6 +13,9 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       // { rel: 'stylesheet',type: 'text/css', href: 'https://yarnpkg.com/en/package/normalize.css'}
     ]
+  },
+  router: {
+    linkActiveClass: 'header-nav-selected-active'
   },
   css: ['~assets/css/normalize.css','~assets/css/common.css'],
   /*
