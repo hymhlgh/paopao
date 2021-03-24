@@ -39,10 +39,9 @@ export default {
 <style scoped>
 .footer{
   width: 100%;
-  height: 1.1rem;
+  height: 110px;
   background-color: #000000;
   color: #fff;
-  font-size: 0.16rem;
 }
 .footer ul{
     height: 100%;

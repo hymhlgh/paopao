@@ -18,17 +18,16 @@ export default {
 </script>
 <style scoped>
 .header-nav {
-  width: 100vw;
-  height: 0.8rem;
+  width: 100%;
+  height: 80px;
   background: rgba(0, 0, 0, .8);
-  font-size: 0.16rem;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 2;
 }
 .nav {
-  width: 1080px;
+  max-width: 1080px;
   height: 100%;
   margin: 0 auto;
   display: flex;
@@ -50,8 +49,8 @@ export default {
 }
 .nav-box li a{
   display: block;
-  height: 0.8rem;
-  line-height: 0.8rem;
+  height: 80px;
+  line-height: 80px;
   font-weight: 500;
   color: #FFFFFF;
   letter-spacing: 1px;
