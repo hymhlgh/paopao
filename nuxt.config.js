@@ -11,7 +11,10 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      // { rel: 'stylesheet',type: 'text/css', href: 'https://yarnpkg.com/en/package/normalize.css'}
+      { rel: 'stylesheet',type: 'text/css', href: 'https://unpkg.com/swiper/swiper-bundle.min.css'}
+    ],
+    script: [
+      { src: 'https://unpkg.com/swiper/swiper-bundle.min.js'}
     ]
   },
   router: {

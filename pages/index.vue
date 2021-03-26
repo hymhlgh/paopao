@@ -21,23 +21,83 @@
       <div class="tiao"></div>
     </div>
     <!--跑跑体育 轮播-->
-    <div class="pao-swiper">
-      <div class="pao-con">
-        <h2 class="title">跑跑体育</h2>
-        <p class="dec">
-          厦门跑跑体育产业于2021年成立,通过8年的沉淀,
-          公司以卡丁车运动切入体育产业,
-          致力于打造整合卡丁车全产业链、
-          新兴运动品牌孵化平台、运动品牌连锁拓展管理、
-          体育产业综合体开发等.
-        </p>
-        <div class="pao-btn">CLICK HERE
-          <img src="~/assets/img/jthei.png" />
+    <!-- <div class="swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <div class="pao-swiper">
+            <div class="pao-con">
+                <h2 class="title">跑跑体育</h2>
+                <p class="dec">
+                  厦门跑跑体育产业于2021年成立,通过8年的沉淀,
+                  公司以卡丁车运动切入体育产业,
+                  致力于打造整合卡丁车全产业链、
+                  新兴运动品牌孵化平台、运动品牌连锁拓展管理、
+                  体育产业综合体开发等.
+                </p>
+                <div class="pao-btn">CLICK HERE
+                  <img src="~/assets/img/jthei.png" />
+                </div>
+              </div>
+              <div class="img-box">
+                <img src="~/assets/img/cat.png" />
+              </div>
+          </div>
         </div>
+        <div class="swiper-slide">啊啊啊啊</div>
+        <div class="swiper-slide">Slide 3</div>
       </div>
-      <div class="img-box">
-        <img src="~/assets/img/cat.png" />
-      </div>
+    </div> -->
+
+    <div class="pao-swiper">
+        <div class="pao-con">
+          <!--类swiper-no-swiping 表示禁止手动滑动-->
+          <div class="swiper-container swiper-con swiper-no-swiping">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <h2 class="title">跑跑体育</h2>
+                <p class="dec">
+                  厦门跑跑体育产业于2021年成立,通过8年的沉淀,
+                  公司以卡丁车运动切入体育产业,
+                  致力于打造整合卡丁车全产业链、
+                  新兴运动品牌孵化平台、运动品牌连锁拓展管理、
+                  体育产业综合体开发等.
+                </p>
+                <div class="pao-btn">CLICK HERE
+                  <img src="~/assets/img/jthei.png" />
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <h2 class="title">跑跑体育2</h2>
+                <p class="dec">
+                  厦门跑跑体育产业于2021年成立,通过8年的沉淀,
+                  公司以卡丁车运动切入体育产业,
+                  致力于打造整合卡丁车全产业链、
+                  新兴运动品牌孵化平台、运动品牌连锁拓展管理、
+                  体育产业综合体开发等.
+                </p>
+                <div class="pao-btn">CLICK HERE
+                  <img src="~/assets/img/jthei.png" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="img-box">
+          <div class="swiper-container swiper-img swiper-no-swiping">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <img src="~/assets/img/cat.png" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="~/assets/img/cat.png" />
+                </div>
+                <div class="swiper-slide">
+                  <img src="~/assets/img/cat.png" />
+                </div>
+            </div>
+          </div>
+          
+        </div>
     </div>
     <!--跑跑米卡-->
     <div class="mi-ka">
@@ -69,7 +129,24 @@ export default {
     AppLogo
   },
   mounted() {
-    axios.post('http://121.196.53.78:8001/api/navbar/list')
+    var delay = 4000;
+    // axios.post('http://121.196.53.78:8001/api/navbar/list')
+    var mySwiper = new Swiper ('.swiper-img', {
+      direction: 'horizontal',
+      loop: true, // 循环模式选项
+      speed:800,
+      autoplay : {
+        delay
+      }
+    })
+    var mySwiperCon = new Swiper ('.swiper-con', {
+      direction: 'vertical',
+      loop: true, // 循环模式选项
+      speed:800,
+      autoplay : {
+        delay
+      },
+    })
   }
 }
 </script>
@@ -136,12 +213,21 @@ export default {
 /* 跑跑 轮播 */
 .pao-swiper{
   width: 1080px;
-  margin: 20px auto;
+  margin: 50px auto;
   display: flex;
+  align-items: center;
 }
 .pao-swiper .img-box{
   width: 540px;
   height: 600px;
+}
+.swiper-img{
+  width: 540px;
+  height: 600px;
+}
+.swiper-con{
+  width: 420px;
+  height: 230px;
 }
 .pao-swiper .img-box>img{
   width: 100%;
@@ -150,8 +236,8 @@ export default {
 }
 .pao-swiper .pao-con{
   width: 540px;
-  height: 600px;
-  padding: 60px;
+  height: 300px;
+  padding: 30px 60px;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
@@ -175,6 +261,7 @@ export default {
   font-size: 14px;
   color: #505050;
   line-height: 20px;
+  cursor: pointer;
 }
 .pao-swiper .pao-con .pao-btn>img{
   position: relative;
@@ -185,7 +272,7 @@ export default {
 /* 跑跑米卡*/
 .mi-ka{
   width: 1200px;
-  margin: 20px auto;
+  margin: 80px auto;
   display: flex;
   position: relative;
   padding-top: 70px;
