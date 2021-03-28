@@ -1,23 +1,25 @@
 <template>
   <div class="home">
     <div class="video-box">
-      <video autoplay muted loop class="video">
+      <video autoplay muted loop class="video" v-if="homeOne.fileType == 2">
         <source 
           type="video/mp4"
-          src="http://1254333170.vod2.myqcloud.com/7898b9fcvodgzp1254333170/361e0dc95285890800455226474/Ac14a15P424A.mp4">
+          :src="homeOne.videoUrl">
       </video>
-      <div class="title">极速体育 尽在跑跑</div>
-      <div class="click-btn">CLICK HERE</div>
+      <img class="video" v-else :src="homeOne.videoUrl" alt="">
+      <div class="title scroll-title">{{homeOne.title}}</div>
+      <a class="click-btn" :href="homeOne.pageUrl" target="_blank">CLICK HERE</a>
       <div class="tiao"></div>
     </div>
     <div class="video-box">
-      <video autoplay muted loop class="video">
+      <video autoplay muted loop class="video" v-if="homeTwo.fileType == 2">
         <source 
           type="video/mp4"
-          src="http://1254333170.vod2.myqcloud.com/7898b9fcvodgzp1254333170/361e0dc95285890800455226474/Ac14a15P424A.mp4">
+          :src="homeTwo.videoUrl">
       </video>
-      <div class="title">极速体育 尽在跑跑</div>
-      <div class="click-btn">CLICK HERE</div>
+      <img class="video" v-else :src="homeTwo.videoUrl" alt="">
+      <div class="title scroll-title">{{homeTwo.title}}</div>
+      <a class="click-btn" :href="homeTwo.pageUrl" target="_blank">CLICK HERE</a>
       <div class="tiao"></div>
     </div>
     <!--跑跑体育 轮播-->
@@ -54,7 +56,7 @@
           <div class="swiper-container swiper-con swiper-no-swiping">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-                <h2 class="title">跑跑体育</h2>
+                <h2 class="title swiper-title">跑跑体育</h2>
                 <p class="dec">
                   厦门跑跑体育产业于2021年成立,通过8年的沉淀,
                   公司以卡丁车运动切入体育产业,
@@ -80,6 +82,8 @@
                 </div>
               </div>
             </div>
+            <!-- 如果需要分页器 -->
+            <div class="swiper-pagination"></div>
           </div>
         </div>
         <div class="img-box">
@@ -121,16 +125,42 @@
 </template>
 
 <script>
-import axios from 'axios';
 import AppLogo from '~/components/AppLogo.vue';
 
 export default {
   components: {
     AppLogo
   },
+  async asyncData({app}){
+    let res = await app.$axios.$post('/api/home/list')
+    let homeOne = {}
+    let homeTwo = {}
+    if (res.code == 200) {
+      
+      let home_1 = res.data.home_1[0];
+      let home_2 = res.data.home_2[0];
+      console.log(home_2)
+      homeOne = {
+        pageUrl: home_1.pageUrl,
+        title: home_1.title || "哈哈",
+        fileType: home_1.filesList[0].fileType,
+        videoUrl: "http://121.196.53.78:8888/svc" + home_1.filesList[0].fileUrl
+      }
+      homeTwo = {
+        pageUrl: home_2.pageUrl,
+        title: home_2.title || "哈哈",
+        fileType: home_2.filesList[0].fileType,
+        videoUrl: "http://121.196.53.78:8888/svc" + home_2.filesList[0].fileUrl
+      }
+    }
+    return {
+      homeOne,
+      homeTwo
+    }
+  },
   mounted() {
+    // this.$axios.$post('/api/home/list')
     var delay = 4000;
-    // axios.post('http://121.196.53.78:8001/api/navbar/list')
     var mySwiper = new Swiper ('.swiper-img', {
       direction: 'horizontal',
       loop: true, // 循环模式选项
@@ -146,6 +176,19 @@ export default {
       autoplay : {
         delay
       },
+      pagination: {
+        el: '.swiper-pagination',
+      },
+    })
+
+    ScrollReveal().reveal('.scroll-title',{ 
+      duration: 2000,
+      distance: '50px'
+    });
+
+    ScrollReveal().reveal('.swiper-title',{
+      distance: '50px',
+     
     })
   }
 }
@@ -185,6 +228,10 @@ export default {
   left: 0;
   width: 100%;
   text-align: center;
+  cursor: pointer;
+}
+.video-box .click-btn:visited,.video-box .click-btn:link{
+   color: #fff;
 }
 .video-box .tiao{
   position: absolute;
@@ -227,8 +274,9 @@ export default {
 }
 .swiper-con{
   width: 420px;
-  height: 230px;
+  height: 400px;
 }
+
 .pao-swiper .img-box>img{
   width: 100%;
   height: 100%;
@@ -236,7 +284,7 @@ export default {
 }
 .pao-swiper .pao-con{
   width: 540px;
-  height: 300px;
+  /* height: 300px; */
   padding: 30px 60px;
   box-sizing: border-box;
   display: flex;

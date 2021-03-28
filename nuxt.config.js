@@ -14,7 +14,8 @@ module.exports = {
       { rel: 'stylesheet',type: 'text/css', href: 'https://unpkg.com/swiper/swiper-bundle.min.css'}
     ],
     script: [
-      { src: 'https://unpkg.com/swiper/swiper-bundle.min.js'}
+      { src: 'https://unpkg.com/swiper/swiper-bundle.min.js'},
+      { src: 'https://unpkg.com/scrollreveal'}
     ]
   },
   router: {
@@ -25,6 +26,28 @@ module.exports = {
   ** Customize the progress bar color
   */
   loading: { color: '#3B8070' },
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy'
+  ],
+  // axios配置
+  axios: {
+    // See https://github.com/nuxt-community/axios-module#options
+    proxy: true, // 表示开启代理
+    prefix: '/api', // 表示给请求url加个前缀 /api
+    credentials: true, // 表示跨域请求时是否需要使用凭证
+    basePath: 'http://121.196.53.78:8001'
+  },
+  // 本地代理配置
+  proxy: {
+    '/api': {
+        target: 'http://121.196.53.78:8001', // 目标接口域名
+        changeOrigin: true, // 表示是否跨域
+        pathRewrite: {
+          '^/api': '', // 把 /api 替换成‘’
+        }
+    }
+  },
   /*
   ** Build configuration
   */
