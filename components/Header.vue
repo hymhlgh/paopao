@@ -5,8 +5,8 @@
       <ul class="nav-box">
         <li><nuxt-link to="/">首页</nuxt-link></li>
         <li><nuxt-link to="/a">旗下品牌</nuxt-link></li>
-        <li><nuxt-link to="/b">公司简介</nuxt-link></li>
-        <li><nuxt-link to="/v">联系我们</nuxt-link></li>
+        <li><nuxt-link to="/companyProfile">公司简介</nuxt-link></li>
+        <li><nuxt-link to="/contactUs">联系我们</nuxt-link></li>
       </ul>
     </div>
   </div>

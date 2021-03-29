@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="video-box">
+    <div class="video-box" v-if="showHomeOne">
       <video autoplay muted loop class="video" v-if="homeOne.fileType == 2">
         <source 
           type="video/mp4"
@@ -11,7 +11,7 @@
       <a class="click-btn" :href="homeOne.pageUrl" target="_blank">CLICK HERE</a>
       <div class="tiao"></div>
     </div>
-    <div class="video-box">
+    <div class="video-box" v-if="showHomeTwo">
       <video autoplay muted loop class="video" v-if="homeTwo.fileType == 2">
         <source 
           type="video/mp4"
@@ -53,41 +53,44 @@
     <div class="pao-swiper">
         <div class="pao-con">
           <!--类swiper-no-swiping 表示禁止手动滑动-->
-          <div class="swiper-container swiper-con swiper-no-swiping">
+          <div class="swiper-container swiper-con">
             <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <h2 class="title swiper-title">跑跑体育</h2>
-                <p class="dec">
-                  厦门跑跑体育产业于2021年成立,通过8年的沉淀,
-                  公司以卡丁车运动切入体育产业,
-                  致力于打造整合卡丁车全产业链、
-                  新兴运动品牌孵化平台、运动品牌连锁拓展管理、
-                  体育产业综合体开发等.
-                </p>
-                <div class="pao-btn">CLICK HERE
-                  <img src="~/assets/img/jthei.png" />
+              <div class="swiper-slide" 
+                v-for="(item,index) in swiperData.conData"
+                :key="index"
+              >
+                <div class="slide-box">
+                  <h2 class="title">{{item.title}}</h2>
+                  <p class="dec">
+                   {{item.title}}
+                  </p>
+                  <div class="pao-btn">CLICK HERE
+                    <img src="~/assets/img/jthei.png" />
+                  </div>
                 </div>
               </div>
-              <div class="swiper-slide">
-                <h2 class="title">跑跑体育2</h2>
-                <p class="dec">
-                  厦门跑跑体育产业于2021年成立,通过8年的沉淀,
-                  公司以卡丁车运动切入体育产业,
-                  致力于打造整合卡丁车全产业链、
-                  新兴运动品牌孵化平台、运动品牌连锁拓展管理、
-                  体育产业综合体开发等.
-                </p>
-                <div class="pao-btn">CLICK HERE
-                  <img src="~/assets/img/jthei.png" />
+              <!-- <div class="swiper-slide">
+                <div class="slide-box">
+                  <h2 class="title">跑跑体育2</h2>
+                  <p class="dec">
+                    厦门跑跑体育产业于2021年成立,通过8年的沉淀,
+                    公司以卡丁车运动切入体育产业,
+                    致力于打造整合卡丁车全产业链、
+                    新兴运动品牌孵化平台、运动品牌连锁拓展管理、
+                    体育产业综合体开发等.
+                  </p>
+                  <div class="pao-btn">CLICK HERE
+                    <img src="~/assets/img/jthei.png" />
+                  </div>
                 </div>
-              </div>
+              </div> -->
             </div>
             <!-- 如果需要分页器 -->
             <div class="swiper-pagination"></div>
           </div>
         </div>
         <div class="img-box">
-          <div class="swiper-container swiper-img swiper-no-swiping">
+          <div class="swiper-container swiper-img">
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
                   <img src="~/assets/img/cat.png" />
@@ -135,51 +138,92 @@ export default {
     let res = await app.$axios.$post('/api/home/list')
     let homeOne = {}
     let homeTwo = {}
+    let swiperData = {
+      conData: [],
+      imgData: []
+    }
+    let showHomeOne = false
+    let showHomeTwo = false
+    // 域名
+    let comUrl = "http://121.196.53.78:8888/svc"
     if (res.code == 200) {
       
       let home_1 = res.data.home_1[0];
       let home_2 = res.data.home_2[0];
-      console.log(home_2)
-      homeOne = {
-        pageUrl: home_1.pageUrl,
-        title: home_1.title || "哈哈",
-        fileType: home_1.filesList[0].fileType,
-        videoUrl: "http://121.196.53.78:8888/svc" + home_1.filesList[0].fileUrl
+
+      showHomeOne = home_1 ? true: false
+      showHomeTwo = home_2 ? true: false
+      if (home_1) {
+         homeOne = {
+          pageUrl: home_1.pageUrl,
+          title: home_1.title || "哈哈",
+          fileType: home_1.filesList[0].fileType,
+          videoUrl: comUrl + home_1.filesList[0].fileUrl
+        }
       }
-      homeTwo = {
-        pageUrl: home_2.pageUrl,
-        title: home_2.title || "哈哈",
-        fileType: home_2.filesList[0].fileType,
-        videoUrl: "http://121.196.53.78:8888/svc" + home_2.filesList[0].fileUrl
+      if (home_2) {
+        homeTwo = {
+          pageUrl: home_2.pageUrl,
+          title: home_2.title || "哈哈",
+          fileType: home_2.filesList[0].fileType,
+          videoUrl: comUrl + home_2.filesList[0].fileUrl
+        }
       }
+
+      if (Array.isArray(res.data.brand_1)) {
+        res.data.brand_1.forEach(item => {
+          swiperData.conData.push({
+            title: item.title,
+            pageUrl: item.pageUrl,
+          })
+          swiperData.imgData.push(comUrl + item.filesList[0].fileUrl)
+        })
+      }
+      
+      
     }
     return {
       homeOne,
-      homeTwo
+      homeTwo,
+      showHomeOne,
+      showHomeTwo,
+      swiperData
+    }
+  },
+  methods: {
+    // 轮播部分
+    initSwiper(){
+      var delay = 4000;
+      var mySwiper = new Swiper ('.swiper-img', {
+        direction: 'horizontal',
+        loop: true, // 循环模式选项
+        speed:800,
+        autoplay : {
+          delay
+        }
+      })
+      var mySwiperCon = new Swiper ('.swiper-con', {
+        direction: 'vertical',
+        loop: true, // 循环模式选项
+        speed:800,
+        autoplay : {
+          delay
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
+        controller: {
+          control: mySwiper
+        }
+      })
+      mySwiper.controller.control = mySwiperCon
+      mySwiperCon.controller.control = mySwiper
     }
   },
   mounted() {
-    // this.$axios.$post('/api/home/list')
-    var delay = 4000;
-    var mySwiper = new Swiper ('.swiper-img', {
-      direction: 'horizontal',
-      loop: true, // 循环模式选项
-      speed:800,
-      autoplay : {
-        delay
-      }
-    })
-    var mySwiperCon = new Swiper ('.swiper-con', {
-      direction: 'vertical',
-      loop: true, // 循环模式选项
-      speed:800,
-      autoplay : {
-        delay
-      },
-      pagination: {
-        el: '.swiper-pagination',
-      },
-    })
+    this.$axios.$post('/api/home/list')
+    this.initSwiper();
 
     ScrollReveal().reveal('.scroll-title',{ 
       duration: 2000,
@@ -274,9 +318,21 @@ export default {
 }
 .swiper-con{
   width: 420px;
-  height: 400px;
+  height: 590px;
 }
-
+.swiper-container-vertical>.swiper-pagination-bullets{
+  display: flex;
+  position: absolute;
+  right: 400px;
+  top: 98%;
+}
+.swiper-con .swiper-pagination-bullet{
+  margin: 0 6px;
+}
+.swiper-con .slide-box{
+  /* position: relative;
+  height: 100%; */
+}
 .pao-swiper .img-box>img{
   width: 100%;
   height: 100%;
@@ -285,7 +341,7 @@ export default {
 .pao-swiper .pao-con{
   width: 540px;
   /* height: 300px; */
-  padding: 30px 60px;
+  padding: 0px 60px;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
