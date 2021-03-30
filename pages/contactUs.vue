@@ -5,25 +5,11 @@
             <div class="h4">CONTACT US</div>
         </div>
         <div class="paopao-contact">
-            <div class="contact-phone">
-                <img class="contact-icon" src="" alt="" />
+            <div class="contact-item" v-for="(item,index) in list" :key="index">
+                <img class="contact-icon" :src="item.icon" alt="" />
                 <div>
-                    联系电话<br/>
-                    400-8888888
-                </div>
-            </div>
-            <div class="contact-email">
-                <img class="contact-icon" src="" alt="" />
-                <div>
-                    邮箱地址<br/>
-                    PAOPAO@QQ.com
-                </div>
-            </div>
-            <div class="contact-address">
-                <img class="contact-icon" src="" alt="" />
-                <div>
-                    公司地址<br/>
-                    厦门市思明区观音山123号
+                    {{item.title}}<br/>
+                    {{item.content}}
                 </div>
             </div>
         </div>
@@ -33,7 +19,24 @@
 <script>
 
 export default {
-    
+    async asyncData ({app}) {
+        let res = await app.$axios.$post('/api/common/list', {
+            id: '',
+            pageType: 'contact_1'
+        })
+        if (res.code == 200) {
+            let comUrl = "http://121.196.53.78:8888/svc"
+            res.data.forEach(v => {
+                Object.assign(v, {
+                    icon: comUrl + v.filesList[0].fileUrl,
+                })
+            })
+        }
+        let list = [...res.data]
+        return {
+            list
+        }
+    }
 }
 </script>
 
@@ -78,13 +81,7 @@ export default {
         height: 102px;
         margin-bottom: 54px;
     }
-    .paopao-contact .contact-phone {
-        flex: 1;
-    }
-    .paopao-contact .contact-email {
-        flex: 1;
-    }
-    .paopao-contact .contact-address {
+    .paopao-contact .contact-item {
         flex: 1;
     }
 </style>

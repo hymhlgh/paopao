@@ -7,42 +7,27 @@
         <div class="paopao-section1">
             <div class="paopao-box">
                 <div class="brand-name">
-                    皮皮与卡丁欢乐亲子餐厅
+                    {{brand_diy1[0].title}}                    
                 </div>
                 <div class="brand-desc">
-                    旗下品牌组要有PPMK跑跑迷卡、皮皮与卡丁欢乐亲子餐厅、WYB意大利足球训练营、动动将篮球、动动战场射击体验馆、壹鹭溜滑轮俱乐部、晴娜芭蕾全外教艺术教育、跑跑卡丁x一峰餐饮和卡丁车亲子运动教育主题乐园九大项目.
-                    旗下品牌组要有PPMK跑跑迷卡、皮皮与卡丁欢乐亲子餐厅、WYB意大利足球训练营、动动将篮球、动动战场射击体验馆、壹鹭溜滑轮俱乐部、晴娜芭蕾全外教艺术教育、跑跑卡丁x一峰餐饮和卡丁车亲子运动教育主题乐园九大项目.
+                    {{brand_diy1[0].content}}
                 </div>
             </div>
             <div class="brand-img">
                 <div class="dark"></div>
-                <img src="" alt="" />
+                <img :src="brand_diy1[0].logo" alt="" />
             </div>
         </div>
-        <div class="paopao-section2">
-            <img src="" alt="">
+        <div class="paopao-section2" :style="'background: url(' +  brand_diy2_2[0].logo + ') no-repeat 100% 100%;'">
+            <img :src="brand_diy2_2[0].logo" alt="">
         </div>
         <div class="paopao-section3">
-            <div class="advantage-item left">
+            <div class="advantage-item" :class="index % 2 == 0 ? 'left' : 'right'" v-for="(item, index) in brand_diy3" :key="index">
                 <div class="content">
-                    <div class="strong">场景优势</div>
-                    <div class="desc">最小200平方,上不封顶!无论户外、户内、门店、过道、公共区域均可.</div>
+                    <div class="strong">{{item.title}}</div>
+                    <div class="desc">{{item.content}}</div>
                 </div>
-                <img class="img" src="" alt="" />
-            </div>
-            <div class="advantage-item right">
-                <div class="content">
-                    <div class="strong">场景优势</div>
-                    <div class="desc">最小200平方,上不封顶!无论户外、户内、门店、过道、公共区域均可.</div>
-                </div>
-                <img class="img" src="" alt="" />
-            </div>
-            <div class="advantage-item left">
-                <div class="content">
-                    <div class="strong">场景优势</div>
-                    <div class="desc">最小200平方,上不封顶!无论户外、户内、门店、过道、公共区域均可.</div>
-                </div>
-                <img class="img" src="" alt="" />
+                <img class="img" :src="item.logo" alt="" />
             </div>
         </div>
     </div>
@@ -51,7 +36,42 @@
 <script>
 
 export default {
-    
+    async asyncData ({app}) {
+        let res = await app.$axios.$post('/api/brand/diy/list')
+        if (res.code == 200) {
+            let comUrl = "http://121.196.53.78:8888/svc"
+            res.data.brand_diy1.forEach(v => {
+                Object.assign(v, {
+                    logo: comUrl + v.filesList[0].fileUrl,
+                })
+            })
+            res.data.brand_diy2_1.forEach(v => {
+                Object.assign(v, {
+                    logo: comUrl + v.filesList[0].fileUrl,
+                })
+            })
+            res.data.brand_diy2_2.forEach(v => {
+                Object.assign(v, {
+                    logo: comUrl + v.filesList[0].fileUrl,
+                })
+            })
+            res.data.brand_diy3.forEach(v => {
+                Object.assign(v, {
+                    logo: comUrl + v.filesList[0].fileUrl,
+                })
+            })
+        }
+        let brand_diy1 = res.data.brand_diy1
+        let brand_diy2_1 = res.data.brand_diy2_1
+        let brand_diy2_2 = res.data.brand_diy2_2
+        let brand_diy3 = res.data.brand_diy3
+        return {
+            brand_diy1,
+            brand_diy2_1,
+            brand_diy2_2,
+            brand_diy3
+        }
+    }
 }
 </script>
 
@@ -131,6 +151,13 @@ export default {
         height: 424px;
         position: relative;
         margin-left: 100px;
+    }
+    .paopao-section1 .brand-img img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: relative;
+        z-index: 1;
     }
     .paopao-section1 .dark {
         width: 556px;

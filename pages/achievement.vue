@@ -5,46 +5,12 @@
             <div class="h4">CERTIFICATE OF HONOR</div>
         </div>
         <div class="paopao-ach">
-            <div class="ach-item">
-                <img class="ach-img" src="" alt="" />
+            <div class="ach-item" v-for="(item, index) in list" :key="index">
+                <img class="ach-img" :src="item.logo" alt="" />
                 <div class="ach-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
+                    {{item.content}}
                 </div>
             </div>
-            <div class="ach-item">
-                <img class="ach-img" src="" alt="" />
-                <div class="ach-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
-                </div>
-            </div>
-            <div class="ach-item">
-                <img class="ach-img" src="" alt="" />
-                <div class="ach-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
-                </div>
-            </div>
-            <div class="ach-item">
-                <img class="ach-img" src="" alt="" />
-                <div class="ach-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
-                </div>
-            </div>
-            <div class="ach-item">
-                <img class="ach-img" src="" alt="" />
-                <div class="ach-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
-                </div>
-            </div>    
         </div>
     </div>
 </template>
@@ -52,7 +18,24 @@
 <script>
 
 export default {
-    
+    async asyncData ({app}) {
+        let res = await app.$axios.$post('/api/common/list', {
+            id: '',
+            pageType: 'introduce_4'
+        })
+        if (res.code == 200) {
+            let comUrl = "http://121.196.53.78:8888/svc"
+            res.data.forEach(v => {
+                Object.assign(v, {
+                    logo: comUrl + v.filesList[0].fileUrl,
+                })
+            })
+        }
+        let list = [...res.data]
+        return {
+            list
+        }
+    }
 }
 </script>
 
@@ -87,12 +70,10 @@ export default {
         margin-right: auto;
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
         justify-content: space-between;
     }
     .paopao-ach .ach-item {
         width: 250px;
-        height: 270px;
         background: #FFFFFF;
         box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.16);
         margin-bottom: 90px;
@@ -104,19 +85,12 @@ export default {
     }
     .paopao-ach .ach-item .ach-desc {
         font-size: 14px;
-        height: 60px;
         box-sizing: border-box;
         font-weight: 400;
         color: #000000;
         line-height: 20px;
         padding: 0 20px;
         margin: 20px 0;
-        overflow:hidden;
-        text-overflow:ellipsis;  
-        white-space: normal;  
-        display:-webkit-box;  
-        -webkit-box-orient:vertical;  
-        -webkit-line-clamp: 3; 
     }
 </style>
 

@@ -6,49 +6,13 @@
         </div>
         <div class="paopao-title">赛事风采</div>
         <div class="paopao-ed">
-            <div class="ed-item">
-                <img class="ed-img" src="" alt="" />
+            <div class="ed-item" v-for="(item, index) in list" :key="index">
+                <img class="ed-img" v-if="item.fileType == 1" :src="item.path" alt="" />
+                <video class="ed-video" v-if="item.fileType == 2" controls :src="item.path"></video>
                 <div class="ed-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
+                    {{item.content}}
                 </div>
             </div>
-            <div class="ed-item">
-                <img class="ed-img" src="" alt="" />
-                <div class="ed-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军\
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
-                </div>
-            </div>
-            <div class="ed-item">
-                <img class="ed-img" src="" alt="" />
-                <div class="ed-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
-                </div>
-            </div>
-            <div class="ed-item">
-                <img class="ed-img" src="" alt="" />
-                <div class="ed-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
-                </div>
-            </div>
-            <div class="ed-item">
-                <img class="ed-img" src="" alt="" />
-                <div class="ed-desc">
-                    获  奖  单  位 :  厦门跑跑加尤车队
-                    获奖名称/荣誉:  2016年CKC中国卡
-                    丁车锦标赛俱乐部杯赛南区复赛冠军
-                </div>
-            </div>    
         </div>
     </div>
 </template>
@@ -56,7 +20,25 @@
 <script>
 
 export default {
-    
+    async asyncData ({app}) {
+        let res = await app.$axios.$post('/api/common/list', {
+            id: '',
+            pageType: 'introduce_3'
+        })
+        if (res.code == 200) {
+            let comUrl = "http://121.196.53.78:8888/svc"
+            res.data.forEach(v => {
+                Object.assign(v, {
+                    path: comUrl + v.filesList[0].fileUrl,
+                    fileType: v.filesList[0].fileType
+                })
+            })
+        }
+        let list = [...res.data]
+        return {
+            list
+        }
+    }
 }
 </script>
 

@@ -6,18 +6,13 @@
         </div>
         <div class="paopao-introduce">
             <div class="paopao-name">
-                <img class="double-arrow" src="" alt="" /> 跑跑体育
+                <img class="double-arrow" src="" alt="" /> {{data.title}}
             </div>
             <div class="paopao-logo">
-                <img src="" alt="" />
+                <img :src="data.logo" alt="" />
             </div>
             <div class="paopao-desc">
-                    厦门跑跑体育产业于2021年成立,通过8年的沉淀,公司以卡丁车运动切入体育产业,致力于打造整合卡丁车全产业链、新兴运动品牌孵化平台、运动品牌连锁拓展管理、体育产业综合体开发等.
-                    厦门跑跑体育产业于2021年成立,通过8年的沉淀,公司以卡丁车运动切入体育产业,致力于打造整合卡丁车全产业链、新兴运动品牌孵化平台、运动品牌连锁拓展管理、体育产业综合体开发等.
-                    厦门跑跑体育产业于2021年成立,通过8年的沉淀,公司以卡丁车运动切入体育产业,致力于打造整合卡丁车全产业链、新兴运动品牌孵化平台、运动品牌连锁拓展管理、体育产业综合体开发等.     厦门跑跑体育产业于2021年成立,通过8年的沉淀,公司以卡丁车运动切入体育产业,致力于打造整合卡丁车全产业链、新兴运动品牌孵化平台、运动品牌连锁拓展管理、体育产业综合体开发等.
-                    厦门跑跑体育产业于2021年成立,通过8年的沉淀,公司以卡丁车运动切入体育产业,致力于打造整合卡丁车全产业链、新兴运动品牌孵化平台、运动品牌连锁拓展管理、体育产业综合体开发等.
-                    厦门跑跑体育产业于2021年成立,通过8年的沉淀,公司以卡丁车运动切入体育产业,致力于打造整合卡丁车全产业链、新兴运动品牌孵化平台、运动品牌连锁拓展管理、体育产业综合体开发等.     厦门跑跑体育产业于2021年成立,通过8年的沉淀,公司以卡丁车运动切入体育产业,致力于打造整合卡丁车全产业链、新兴运动品牌孵化平台、运动品牌连锁拓展管理、体育产业综合体开发等.
-                    厦门跑跑体育产业于2021年成立,通过8年的沉淀,公司以卡丁车运动切入体育产业,致力于打造整合卡丁车全产业链、
+                {{data.content}}                    
             </div>
         </div>
     </div>
@@ -26,7 +21,23 @@
 <script>
 
 export default {
-    
+    async asyncData ({app}) {
+        let res = await app.$axios.$post('/api/common/list', {
+            id: '',
+            pageType: 'introduce_2'
+        })
+        let data = {}
+        if (res.code == 200) {
+            let comUrl = "http://121.196.53.78:8888/svc"
+            Object.assign(res.data[0], {
+                logo: comUrl + res.data[0].filesList[0].fileUrl,
+            })
+            Object.assign(data, res.data[0])
+        }
+        return {
+            data
+        }
+    }
 }
 </script>
 
@@ -80,6 +91,11 @@ export default {
         margin-bottom: 50px;
         margin-left: auto;
         margin-right: auto;
+    }
+    .paopao-introduce .paopao-logo img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
     }
     .paopao-introduce .paopao-desc {
         font-size: 18px;

@@ -1,59 +1,25 @@
 <template>
   <div class="home">
-    <div class="video-box" v-if="showHomeOne">
-      <video autoplay muted loop class="video" v-if="homeOne.fileType == 2">
+    <!-- banner-->
+    <div class="video-box"
+      v-for="(item,index) in bannerData"
+      :key="index"
+    >
+      <video autoplay muted loop class="video" v-if="item.fileType == 2">
         <source 
           type="video/mp4"
-          :src="homeOne.videoUrl">
+          :src="item.mediaUrl">
       </video>
-      <img class="video" v-else :src="homeOne.videoUrl" alt="">
-      <div class="title scroll-title">{{homeOne.title}}</div>
-      <a class="click-btn" :href="homeOne.pageUrl" target="_blank">CLICK HERE</a>
+      <img class="video" v-else :src="item.mediaUrl" alt="">
+      <div class="title scroll-title">{{item.title}}</div>
+      <a class="click-btn" :href="item.pageUrl" target="_blank">CLICK HERE</a>
       <div class="tiao"></div>
     </div>
-    <div class="video-box" v-if="showHomeTwo">
-      <video autoplay muted loop class="video" v-if="homeTwo.fileType == 2">
-        <source 
-          type="video/mp4"
-          :src="homeTwo.videoUrl">
-      </video>
-      <img class="video" v-else :src="homeTwo.videoUrl" alt="">
-      <div class="title scroll-title">{{homeTwo.title}}</div>
-      <a class="click-btn" :href="homeTwo.pageUrl" target="_blank">CLICK HERE</a>
-      <div class="tiao"></div>
-    </div>
-    <!--跑跑体育 轮播-->
-    <!-- <div class="swiper-container">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <div class="pao-swiper">
-            <div class="pao-con">
-                <h2 class="title">跑跑体育</h2>
-                <p class="dec">
-                  厦门跑跑体育产业于2021年成立,通过8年的沉淀,
-                  公司以卡丁车运动切入体育产业,
-                  致力于打造整合卡丁车全产业链、
-                  新兴运动品牌孵化平台、运动品牌连锁拓展管理、
-                  体育产业综合体开发等.
-                </p>
-                <div class="pao-btn">CLICK HERE
-                  <img src="~/assets/img/jthei.png" />
-                </div>
-              </div>
-              <div class="img-box">
-                <img src="~/assets/img/cat.png" />
-              </div>
-          </div>
-        </div>
-        <div class="swiper-slide">啊啊啊啊</div>
-        <div class="swiper-slide">Slide 3</div>
-      </div>
-    </div> -->
 
-    <div class="pao-swiper">
+    <!--跑跑体育 轮播-->
+    <div class="pao-swiper" v-if="swiperData.conData && swiperData.imgData">
         <div class="pao-con">
-          <!--类swiper-no-swiping 表示禁止手动滑动-->
-          <div class="swiper-container swiper-con">
+          <div class="swiper-container swiper-con swiper-container-vertical">
             <div class="swiper-wrapper">
               <div class="swiper-slide" 
                 v-for="(item,index) in swiperData.conData"
@@ -62,69 +28,60 @@
                 <div class="slide-box">
                   <h2 class="title">{{item.title}}</h2>
                   <p class="dec">
-                   {{item.title}}
+                   {{item.content}}
                   </p>
-                  <div class="pao-btn">CLICK HERE
+                  <a class="pao-btn" :href="item.pageUrl" target="_blank">CLICK HERE
                     <img src="~/assets/img/jthei.png" />
-                  </div>
+                  </a>
                 </div>
               </div>
-              <!-- <div class="swiper-slide">
-                <div class="slide-box">
-                  <h2 class="title">跑跑体育2</h2>
-                  <p class="dec">
-                    厦门跑跑体育产业于2021年成立,通过8年的沉淀,
-                    公司以卡丁车运动切入体育产业,
-                    致力于打造整合卡丁车全产业链、
-                    新兴运动品牌孵化平台、运动品牌连锁拓展管理、
-                    体育产业综合体开发等.
-                  </p>
-                  <div class="pao-btn">CLICK HERE
-                    <img src="~/assets/img/jthei.png" />
-                  </div>
-                </div>
-              </div> -->
             </div>
-            <!-- 如果需要分页器 -->
             <div class="swiper-pagination"></div>
           </div>
         </div>
         <div class="img-box">
           <div class="swiper-container swiper-img">
             <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                  <img src="~/assets/img/cat.png" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="~/assets/img/cat.png" />
-                </div>
-                <div class="swiper-slide">
-                  <img src="~/assets/img/cat.png" />
+                <div class="swiper-slide"  v-for="(item,index) in swiperData.imgData"
+                :key="index">
+                  <img :src="item" />
                 </div>
             </div>
           </div>
-          
         </div>
     </div>
     <!--跑跑米卡-->
-    <div class="mi-ka">
-      <h2 class="title">PPMK跑跑迷卡</h2>
+    <div class="mi-ka" v-if="pipiData">
+      <h2 class="title">{{pipiData.title}}</h2>
       <div class="img-box">
         <img src="https://pmo47b088-pic37.websiteonline.cn/upload/222_1j3r.jpg" />
       </div>
       <div class="content">
-        <p>
-          上海顺舟电子科技有限公司（又称“上海顺舟网络科技有限公司”）
-          是一家从事无线通信技术产品的研发、生产与销售的科技型企业，
-          公司始终以追求卓越、锲而不舍的精神致力于ZigBee、GPRS/GSM、Wi-Fi、
-          1G以下频段（433M/470M）的研发和应用，以专业的技术和良好的
-        </p>
-        <div class="con-btn">CLICK HERE
+        <p class="dec">{{pipiData.content}}</p>
+        <a class="con-btn" :href="pipiData.pageUrl">CLICK HERE
           <img src="~/assets/img/jiantou.png" />
-        </div>
+        </a>
       </div>
     </div>
+    <img 
+      @click.stop.prevent="menuOpenMe(1)"
+      class="menu-open" 
+      src="~/assets/img/jthei.png" />
+    <!--悬浮菜单-->
+    <ul :class="menuPiShow">
+      <li 
+        :class="['menu-item',index == menuIndex ? 'menu-active' : '']"
+        v-for="(item,index) in menuData"
+        :key="index"
+        @click="changMenu(index,item)"
+      >{{item.title}}</li>
+      <img 
+        @click="menuOpenMe(0)"
+        class="menu-open-child" 
+        src="~/assets/img/jthei.png" />
+    </ul>
   </div>
+  
 </template>
 
 <script>
@@ -134,91 +91,106 @@ export default {
   components: {
     AppLogo
   },
+  data () {
+    return {
+      menuIndex: 0,
+      menuPiShow: 'menu-piao',
+    }
+  },
   async asyncData({app}){
     let res = await app.$axios.$post('/api/home/list')
-    let homeOne = {}
-    let homeTwo = {}
     let swiperData = {
       conData: [],
       imgData: []
     }
-    let showHomeOne = false
-    let showHomeTwo = false
+    let bannerData = []
+    let menuData =[]
+    let pipiData = null
     // 域名
     let comUrl = "http://121.196.53.78:8888/svc"
     if (res.code == 200) {
-      
-      let home_1 = res.data.home_1[0];
-      let home_2 = res.data.home_2[0];
-
-      showHomeOne = home_1 ? true: false
-      showHomeTwo = home_2 ? true: false
-      if (home_1) {
-         homeOne = {
-          pageUrl: home_1.pageUrl,
-          title: home_1.title || "哈哈",
-          fileType: home_1.filesList[0].fileType,
-          videoUrl: comUrl + home_1.filesList[0].fileUrl
-        }
+      // banner
+      if (Array.isArray(res.data.home_1)) {
+        res.data.home_1.forEach(item => {
+          bannerData.push({
+            title: item.title || "跑跑体育",
+            pageUrl: item.pageUrl,
+            mediaUrl: comUrl + item.filesList[0].fileUrl,
+            fileType: item.filesList[0].fileType || 1
+          })
+        })
       }
-      if (home_2) {
-        homeTwo = {
-          pageUrl: home_2.pageUrl,
-          title: home_2.title || "哈哈",
-          fileType: home_2.filesList[0].fileType,
-          videoUrl: comUrl + home_2.filesList[0].fileUrl
-        }
-      }
-
-      if (Array.isArray(res.data.brand_1)) {
-        res.data.brand_1.forEach(item => {
+      // 轮播
+      if (Array.isArray(res.data.home_2)) {
+        res.data.home_2.forEach(item => {
           swiperData.conData.push({
             title: item.title,
+            content: item.content,
             pageUrl: item.pageUrl,
           })
           swiperData.imgData.push(comUrl + item.filesList[0].fileUrl)
         })
       }
+      // 底部菜单
+      if (Array.isArray(res.data.brand_1)) {
+        res.data.brand_1.forEach(item => {
+          menuData.push({
+            title: item.title,
+            content: item.content,
+            pageUrl: item.pageUrl,
+            mediaUrl: comUrl + item.filesList[0].fileUrl
+          })
+        })
+      }
+
+      if (menuData.length > 0) {
+        pipiData = menuData[0]
+      }
       
       
     }
     return {
-      homeOne,
-      homeTwo,
-      showHomeOne,
-      showHomeTwo,
-      swiperData
+      bannerData,
+      swiperData,
+      menuData,
+      pipiData
     }
   },
   methods: {
+    menuOpenMe(type){
+      if (type == 1) {
+        this.menuPiShow = "menu-piao menu-show-xxx"
+      } else {
+        this.menuPiShow = "menu-piao"
+      }
+    },
+    // 切换菜单
+    changMenu(index,item) {
+      this.menuIndex = index
+      this.pipiData = item
+    },
     // 轮播部分
     initSwiper(){
       var delay = 4000;
-      var mySwiper = new Swiper ('.swiper-img', {
-        direction: 'horizontal',
-        loop: true, // 循环模式选项
-        speed:800,
-        autoplay : {
-          delay
-        }
-      })
       var mySwiperCon = new Swiper ('.swiper-con', {
         direction: 'vertical',
         loop: true, // 循环模式选项
         speed:800,
         autoplay : {
           delay
-        },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true
-        },
-        controller: {
-          control: mySwiper
         }
       })
-      mySwiper.controller.control = mySwiperCon
-      mySwiperCon.controller.control = mySwiper
+
+      var mySwiperImg = new Swiper ('.swiper-img', {
+        direction: 'horizontal',
+        loop: true, // 循环模式选项
+        speed:800,
+        controller: {
+          control: mySwiperCon
+        }
+      })
+      mySwiperCon.controller.control = mySwiperImg
+      mySwiperImg.controller.control = mySwiperCon
     }
   },
   mounted() {
@@ -318,20 +290,15 @@ export default {
 }
 .swiper-con{
   width: 420px;
-  height: 590px;
+  min-height: 380px;
+  max-height: 420px;
 }
-.swiper-container-vertical>.swiper-pagination-bullets{
+.slide-box{
+  width: 100%;
+  height: 100%;
   display: flex;
-  position: absolute;
-  right: 400px;
-  top: 98%;
-}
-.swiper-con .swiper-pagination-bullet{
-  margin: 0 6px;
-}
-.swiper-con .slide-box{
-  /* position: relative;
-  height: 100%; */
+  flex-direction: column;
+  justify-content: center;
 }
 .pao-swiper .img-box>img{
   width: 100%;
@@ -340,12 +307,11 @@ export default {
 }
 .pao-swiper .pao-con{
   width: 540px;
-  /* height: 300px; */
   padding: 0px 60px;
   box-sizing: border-box;
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
-  align-content: center;
+  align-content: center; */
 }
 .pao-swiper .pao-con .title{
   font-size: 36px;
@@ -426,6 +392,11 @@ export default {
   letter-spacing: 3px;
   line-height: 25px;
 }
+.content .dec{
+  max-height:370px;
+  text-align:justify;
+	text-justify:inter-word;
+}
 .content .con-btn{
   display: inline-block;
   background-color: #E02020;
@@ -439,6 +410,58 @@ export default {
 .content .con-btn>img{
   position: relative;
   top: 4px;
+}
+/* 底部菜单 */
+.menu-open{
+  z-index: 999;
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.menu-piao{
+  z-index: 998;
+  position: fixed;
+  left: -110%;
+  bottom: 100px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  box-sizing: border-box;
+  padding: 30px;
+  padding-left:150px;
+  max-width: 800px;
+  min-height: 340px;
+  display: flex;
+  flex-wrap: wrap;
+  transition: all 0.5s;
+}
+.menu-piao .menu-open-child{
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.menu-show-xxx{
+  left: 0;
+}
+.menu-piao .menu-item{
+  display: block;
+  width: 150px;
+  margin: 10px 20px;
+  box-sizing: border-box;
+  padding: 5px;
+  line-height: 25px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  font-size: 18px;
+}
+.menu-piao .menu-item:hover{
+  color: #F2DB00;
+}
+.menu-item.menu-active{
+  border:solid 1px #F2DB00;
 }
 </style>
 
