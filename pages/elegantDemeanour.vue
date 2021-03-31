@@ -21,12 +21,12 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('/api/common/list', {
+        let res = await app.$axios.$post('http://121.196.53.78:8001/api/common/list', {
             id: '',
             pageType: 'introduce_3'
         })
         if (res.code == 200) {
-            let comUrl = "http://121.196.53.78:8888/svc"
+            let comUrl = "/svc"
             res.data.forEach(v => {
                 Object.assign(v, {
                     path: comUrl + v.filesList[0].fileUrl,

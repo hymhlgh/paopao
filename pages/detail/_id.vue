@@ -6,14 +6,13 @@
         </div>
         <div class="paopao-brand">
             <div class="brand-name">
-                皮皮与卡丁欢乐亲子餐厅
+                {{data.title}}
             </div>
             <div class="brand-img">
-                <img src="" alt="" />
+                <img :src="data.logo" alt="" />
             </div>
             <div class="brand-desc">
-                旗下品牌组要有PPMK跑跑迷卡、皮皮与卡丁欢乐亲子餐厅、WYB意大利足球训练营、动动将篮球、动动战场射击体验馆、壹鹭溜滑轮俱乐部、晴娜芭蕾全外教艺术教育、跑跑卡丁x一峰餐饮和卡丁车亲子运动教育主题乐园九大项目.
-                旗下品牌组要有PPMK跑跑迷卡、皮皮与卡丁欢乐亲子餐厅、WYB意大利足球训练营、动动将篮球、动动战场射击体验馆、壹鹭溜滑轮俱乐部、晴娜芭蕾全外教艺术教育、跑跑卡丁x一峰餐饮和卡丁车亲子运动教育主题乐园九大项目.
+                {{data.content}}
             </div>
         </div>
     </div>
@@ -22,7 +21,34 @@
 <script>
 
 export default {
-    
+    async asyncData ({app, params}) {
+        console.log(params)
+        let id = ''
+        // 根据路由pageUrl获取id
+        let res1 = await app.$axios.$post('http://121.196.53.78:8001/api/brand/nav/list')
+        if (res1.code == 200) {
+            res1.data.forEach(v => {
+                if (v.pageUrl == params.id) {
+                    id = v.id
+                }
+            })
+        }
+        let res = await app.$axios.$post('http://121.196.53.78:8001/api/common/list', {
+            id: id || '',
+            pageType: ''
+        })
+        let data = {}
+        if (res.code == 200) {
+            let comUrl = "/svc"
+            Object.assign(res.data[0], {
+                logo: comUrl + res.data[0].filesList[0].fileUrl,
+            })
+            Object.assign(data, res.data[0])
+        }
+        return {
+            data
+        }
+    }
 }
 </script>
 
@@ -30,10 +56,11 @@ export default {
     .paopao-poster {
         width: 100%;
         height: 400px;
-        background: #000000;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        background: url('../../assets/img/banner_bg.jpg') no-repeat;
+        background-size: cover;
     }
     .paopao-poster .h1 {
         font-size: 68px;
@@ -90,6 +117,10 @@ export default {
         margin-bottom: 50px;
         margin-left: auto;
         margin-right: auto;
+    }
+    .paopao-brand .brand-img img {
+        width: 100%;
+        display: block;
     }
     .paopao-brand .brand-desc {
         font-size: 16px;

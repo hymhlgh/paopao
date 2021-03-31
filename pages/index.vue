@@ -12,7 +12,10 @@
       </video>
       <img class="video" v-else :src="item.mediaUrl" alt="">
       <div class="title scroll-title">{{item.title}}</div>
-      <a class="click-btn" :href="item.pageUrl" target="_blank">CLICK HERE</a>
+      <div class="click-btn" target="_blank" @click="gotoPage(item)">
+        CLICK HERE
+      </div>
+      <!-- <a class="click-btn" :href="item.pageUrl" target="_blank">CLICK HERE</a> -->
       <div class="tiao"></div>
     </div>
 
@@ -30,9 +33,9 @@
                   <p class="dec">
                    {{item.content}}
                   </p>
-                  <a class="pao-btn" :href="item.pageUrl" target="_blank">CLICK HERE
+                  <div class="pao-btn" @click="gotoPage(item)" target="_blank">CLICK HERE
                     <img src="~/assets/img/jthei.png" />
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -52,21 +55,28 @@
     </div>
     <!--跑跑米卡-->
     <div class="mi-ka" v-if="pipiData">
-      <h2 class="title">{{pipiData.title}}</h2>
+      <h2 class="title scroll-title">{{pipiData.title}}</h2>
       <div class="img-box">
-        <img src="https://pmo47b088-pic37.websiteonline.cn/upload/222_1j3r.jpg" />
+        <img :src="pipiData.mediaUrl" />
       </div>
       <div class="content">
-        <p class="dec">{{pipiData.content}}</p>
-        <a class="con-btn" :href="pipiData.pageUrl">CLICK HERE
+        <p class="dec scroll-title">{{pipiData.content}}</p>
+        <div class="con-btn" @click="gotoPage(pipiData)">CLICK HERE
           <img src="~/assets/img/jiantou.png" />
-        </a>
+        </div>
+        <!-- <nuxt-link 
+          class="con-btn"
+          :to="{name: 'detail-id', params: {id: pipiData.pageUrl}}"
+        >CLICK HERE
+          <img src="~/assets/img/jiantou.png" />
+        </nuxt-link> -->
       </div>
     </div>
     <img 
+       v-if="iconShow"
       @click.stop.prevent="menuOpenMe(1)"
       class="menu-open" 
-      src="~/assets/img/jthei.png" />
+      src="~/assets/img/right.png" />
     <!--悬浮菜单-->
     <ul :class="menuPiShow">
       <li 
@@ -75,10 +85,11 @@
         :key="index"
         @click="changMenu(index,item)"
       >{{item.title}}</li>
-      <img 
+      <img
+        v-if="!iconShow"
         @click="menuOpenMe(0)"
         class="menu-open-child" 
-        src="~/assets/img/jthei.png" />
+        src="~/assets/img/left.png" />
     </ul>
   </div>
   
@@ -95,10 +106,11 @@ export default {
     return {
       menuIndex: 0,
       menuPiShow: 'menu-piao',
+      iconShow: true
     }
   },
   async asyncData({app}){
-    let res = await app.$axios.$post('/api/home/list')
+    let res = await app.$axios.$post('http://121.196.53.78:8001/api/home/list')
     let swiperData = {
       conData: [],
       imgData: []
@@ -107,7 +119,8 @@ export default {
     let menuData =[]
     let pipiData = null
     // 域名
-    let comUrl = "http://121.196.53.78:8888/svc"
+    // let comUrl = "http://121.196.53.78:8888/svc"
+    let comUrl = "/svc"
     if (res.code == 200) {
       // banner
       if (Array.isArray(res.data.home_1)) {
@@ -115,6 +128,8 @@ export default {
           bannerData.push({
             title: item.title || "跑跑体育",
             pageUrl: item.pageUrl,
+            isOutJoin: item.isOutJoin,
+            openType: item.openType,
             mediaUrl: comUrl + item.filesList[0].fileUrl,
             fileType: item.filesList[0].fileType || 1
           })
@@ -127,6 +142,8 @@ export default {
             title: item.title,
             content: item.content,
             pageUrl: item.pageUrl,
+            isOutJoin: item.isOutJoin,
+            openType: item.openType,
           })
           swiperData.imgData.push(comUrl + item.filesList[0].fileUrl)
         })
@@ -138,16 +155,27 @@ export default {
             title: item.title,
             content: item.content,
             pageUrl: item.pageUrl,
+            id: item.id,
             mediaUrl: comUrl + item.filesList[0].fileUrl
           })
         })
       }
 
-      if (menuData.length > 0) {
+      let diy1 = res.data.brand_diy1
+      if (diy1.length>0){
+        let item = diy1[0]
+        pipiData = {
+          title: item.title,
+          content: item.content,
+          pageUrl: item.pageUrl,
+          id: item.id,
+          isOutJoin: item.isOutJoin,
+          openType: item.openType,
+          mediaUrl: comUrl + item.filesList[0].fileUrl
+        }
+      } else if(menuData.length > 0) {
         pipiData = menuData[0]
       }
-      
-      
     }
     return {
       bannerData,
@@ -157,11 +185,22 @@ export default {
     }
   },
   methods: {
+    gotoPage(item){
+      if (item.isOutJoin) { // 外链
+        window.open(item.pageUrl);
+      } else {
+        this.$router.push({
+          path: `/detail/${item.pageUrl}`
+        })
+      }
+    },
     menuOpenMe(type){
       if (type == 1) {
         this.menuPiShow = "menu-piao menu-show-xxx"
+        this.iconShow = false
       } else {
         this.menuPiShow = "menu-piao"
+        this.iconShow = true
       }
     },
     // 切换菜单
@@ -189,12 +228,13 @@ export default {
           control: mySwiperCon
         }
       })
+      console.log(mySwiperCon)
       mySwiperCon.controller.control = mySwiperImg
       mySwiperImg.controller.control = mySwiperCon
     }
   },
   mounted() {
-    this.$axios.$post('/api/home/list')
+    //this.$axios.$post('/api/home/list')
     this.initSwiper();
 
     ScrollReveal().reveal('.scroll-title',{ 
@@ -223,6 +263,7 @@ export default {
   box-sizing: border-box;
   position: relative;
   color: #fff;
+  background-color: black;
 }
 .video-box .video{
   width: 100%;

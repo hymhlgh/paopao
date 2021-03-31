@@ -6,7 +6,9 @@
         </div>
         <div class="paopao-ach">
             <div class="ach-item" v-for="(item, index) in list" :key="index">
-                <img class="ach-img" :src="item.logo" alt="" />
+                <div class="ach-box">
+                    <img class="ach-img" :src="item.logo" alt="" />
+                </div>
                 <div class="ach-desc">
                     {{item.content}}
                 </div>
@@ -19,12 +21,12 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('/api/common/list', {
+        let res = await app.$axios.$post('http://121.196.53.78:8001/api/common/list', {
             id: '',
             pageType: 'introduce_4'
         })
         if (res.code == 200) {
-            let comUrl = "http://121.196.53.78:8888/svc"
+            let comUrl = "/svc"
             res.data.forEach(v => {
                 Object.assign(v, {
                     logo: comUrl + v.filesList[0].fileUrl,
@@ -43,10 +45,11 @@ export default {
     .paopao-poster {
         width: 100%;
         height: 400px;
-        background: #000000;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        background: url('../assets/img/banner_bg.jpg') no-repeat;
+        background-size: cover;
     }
     .paopao-poster .h1 {
         font-size: 68px;
@@ -78,10 +81,24 @@ export default {
         box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.16);
         margin-bottom: 90px;
     }
-    .paopao-ach .ach-item .ach-img{
+    .paopao-ach .ach-item .ach-box{
         width: 100%;
         height: 170px;
+        overflow: hidden;
+    }
+    .paopao-ach .ach-item .ach-img:hover {
+        transform:scale(1.2);
+    }
+    .paopao-ach .ach-item .ach-img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
         display: block;
+        cursor: pointer;
+        transition:all .4s;
+        -moz-transition:all .4s;
+        -webkit-transition:all .4s;
+        -o-transition:all .4s;
     }
     .paopao-ach .ach-item .ach-desc {
         font-size: 14px;

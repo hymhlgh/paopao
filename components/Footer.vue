@@ -1,8 +1,12 @@
 <template>
   <div class="footer">
     <ul>
-        <li v-for="(item,index) in listData" :key="index">
-          {{item.name}}
+        <li 
+          v-for="(item,index) in listData" 
+          :key="index"
+          @click="gotoPage(item.url)"
+        >
+         {{item.name}}
         </li>
     </ul>
     <div class="footer-dec">跑跑体育用品有限公司</div>
@@ -13,25 +17,16 @@ export default {
   data () {
     return {
       listData: [
-        {name: "旗下品牌"},
-        {name: "公司介绍"},
-        {name: "关于我们"}
+        {name: "旗下品牌",url: '/brand'},
+        {name: "公司介绍",url: '/companyProfile'},
+        {name: "联系我们",url: '/contactUs'}
       ]
     }
   },
-  async asyncData() {
-    let listData = await new Promise((resolve,reject) => {
-      setTimeout(()=> {
-        resolve([
-          {name: "旗下品牌"},
-          {name: "公司介绍"},
-          {name: "关于我们"}
-        ],1000)
-      })
-    })
-
-    return {
-      listData: listData
+  methods: {
+    gotoPage(url){
+      console.log(url)
+      this.$router.push({path: url})
     }
   }
 }
@@ -52,6 +47,9 @@ export default {
 .footer ul li{
     margin: 0 60px;
     cursor: pointer;
+}
+.footer .li-a{
+  color: #fff;
 }
 .footer-dec{
     background: #464646;

@@ -37,9 +37,9 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('/api/brand/diy/list')
+        let res = await app.$axios.$post('http://121.196.53.78:8001/api/brand/diy/list')
         if (res.code == 200) {
-            let comUrl = "http://121.196.53.78:8888/svc"
+            let comUrl = "/svc"
             res.data.brand_diy1.forEach(v => {
                 Object.assign(v, {
                     logo: comUrl + v.filesList[0].fileUrl,
