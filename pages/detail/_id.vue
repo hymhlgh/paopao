@@ -25,7 +25,7 @@ export default {
         console.log(params)
         let id = ''
         // 根据路由pageUrl获取id
-        let res1 = await app.$axios.$post('http://121.196.53.78:8001/api/brand/nav/list')
+        let res1 = await app.$axios.$post('http://121.196.53.78:8888/web_api/api/brand/nav/list')
         if (res1.code == 200) {
             res1.data.forEach(v => {
                 if (v.pageUrl == params.id) {
@@ -33,7 +33,7 @@ export default {
                 }
             })
         }
-        let res = await app.$axios.$post('http://121.196.53.78:8001/api/common/list', {
+        let res = await app.$axios.$post('http://121.196.53.78:8888/web_api/api/common/list', {
             id: id || '',
             pageType: ''
         })

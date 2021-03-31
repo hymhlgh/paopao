@@ -39,24 +39,10 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+import { mapState } from 'vuex';
 export default {
-  data () {
-    return {
-      brandNav: []
-    }
-  },
-  mounted () {
-    this.getBrandNav()
-  },
-  methods: {
-    async getBrandNav () {
-      let res = await axios.$post('/api/brand/nav/list')
-      console.log(res) 
-      if (res.code == 200) {
-        this.brandNav = res.data
-      }
-    }
+  computed: {
+    ...mapState(['brandNav'])
   }
 }
 </script>

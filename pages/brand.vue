@@ -18,7 +18,7 @@
                 <img :src="brand_diy1[0].logo" alt="" />
             </div>
         </div>
-        <div class="paopao-section2" :style="'background: url(' +  brand_diy2_2[0].logo + ') no-repeat 100% 100%;'">
+        <div class="paopao-section2" :style="'background: url(' +  brand_diy2_2[0].logo + ') no-repeat;'">
             <img :src="brand_diy2_2[0].logo" alt="">
         </div>
         <div class="paopao-section3">
@@ -184,6 +184,7 @@ export default {
         background: #000;
         margin-top: 212px;
         position: relative;
+        background-size: cover;
     } 
     .paopao-section2 img {
         width: 740px;
