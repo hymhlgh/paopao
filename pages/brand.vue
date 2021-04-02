@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="paopao-poster">
-            <div class="h1">旗下品牌</div>
+            <div class="h1 scroll-title">旗下品牌</div>
             <div class="h4">BRANDS</div>
         </div>
         <div class="paopao-section1">
@@ -15,7 +15,8 @@
             </div>
             <div class="brand-img">
                 <div class="dark"></div>
-                <img :src="brand_diy1[0].logo" alt="" />
+                <img class="ed-img" v-if="brand_diy1[0].fileType == 1" :src="brand_diy1[0].path" alt="" />
+                <video class="ed-video" v-if="brand_diy1[0].fileType == 2" controls :src="brand_diy1[0].path"></video>
             </div>
         </div>
         <div class="paopao-section2" :style="'background: url(' +  brand_diy2_2[0].logo + ') no-repeat;'">
@@ -42,7 +43,8 @@ export default {
             let comUrl = "/svc"
             res.data.brand_diy1.forEach(v => {
                 Object.assign(v, {
-                    logo: comUrl + v.filesList[0].fileUrl,
+                    path: comUrl + v.filesList[0].fileUrl,
+                    fileType: v.filesList[0].fileType
                 })
             })
             res.data.brand_diy2_1.forEach(v => {
@@ -71,6 +73,12 @@ export default {
             brand_diy2_2,
             brand_diy3
         }
+    },
+    mounted(){
+        ScrollReveal().reveal('.scroll-title',{ 
+            duration: 2000,
+            distance: '50px'
+        });
     }
 }
 </script>
@@ -79,10 +87,11 @@ export default {
     .paopao-poster {
         width: 100%;
         height: 400px;
-        background: #000000;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        background: url('../assets/img/banner_bg.jpg') no-repeat;
+        background-size: cover;
     }
     .paopao-poster .h1 {
         font-size: 68px;
@@ -152,7 +161,14 @@ export default {
         position: relative;
         margin-left: 100px;
     }
-    .paopao-section1 .brand-img img{
+    .paopao-section1 .brand-img .ed-img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: relative;
+        z-index: 1;
+    }
+    .paopao-section1 .brand-img .ed-video{
         width: 100%;
         height: 100%;
         object-fit: cover;

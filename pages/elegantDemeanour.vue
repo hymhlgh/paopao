@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="paopao-poster">
-            <div class="h1">赛事风采</div>
+            <div class="h1 scroll-title">赛事风采</div>
             <div class="h4">ELEGANT DEMEANOUR</div>
         </div>
         <div class="paopao-title">赛事风采</div>
@@ -21,7 +21,7 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('http://121.196.53.78:8888/web_api/api/common/list', {
+        let res = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/common/list', {
             id: '',
             pageType: 'introduce_3'
         })
@@ -38,6 +38,12 @@ export default {
         return {
             list
         }
+    },
+    mounted(){
+        ScrollReveal().reveal('.scroll-title',{ 
+            duration: 2000,
+            distance: '50px'
+        });
     }
 }
 </script>
@@ -46,10 +52,11 @@ export default {
     .paopao-poster {
         width: 100%;
         height: 400px;
-        background: #000000;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        background: url('../assets/img/banner_bg.jpg') no-repeat;
+        background-size: cover;
     }
     .paopao-poster .h1 {
         font-size: 68px;

@@ -1,12 +1,12 @@
 <template>
     <div class="container">
         <div class="paopao-poster">
-            <div class="h1">公司介绍</div>
+            <div class="h1 scroll-title">公司介绍</div>
             <div class="h4">PAOPAO SPORTS</div>
         </div>
         <div class="paopao-introduce">
             <div class="paopao-name">
-                <img class="double-arrow" src="" alt="" /> {{data.title}}
+                <img class="double-arrow" src="../assets/img/arrow-paopao.png" alt="" /> {{data.title}}
             </div>
             <div class="paopao-logo">
                 <img :src="data.logo" alt="" />
@@ -22,7 +22,7 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('http://121.196.53.78:8888/web_api/api/common/list', {
+        let res = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/common/list', {
             id: '',
             pageType: 'introduce_2'
         })
@@ -37,6 +37,12 @@ export default {
         return {
             data
         }
+    },
+    mounted(){
+        ScrollReveal().reveal('.scroll-title',{ 
+            duration: 2000,
+            distance: '50px'
+        });
     }
 }
 </script>
@@ -45,10 +51,11 @@ export default {
     .paopao-poster {
         width: 100%;
         height: 400px;
-        background: #000000;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        background: url('../assets/img/banner_bg.jpg') no-repeat;
+        background-size: cover;
     }
     .paopao-poster .h1 {
         font-size: 68px;
@@ -76,12 +83,14 @@ export default {
         font-weight: 600;
         color: #000000;
         margin-left: 32px;
+        display: flex;
+        align-items: center;
     }
-    .paopao-introduce .paopao-name .dodouble-arrow {
+    .paopao-introduce .paopao-name .double-arrow {
         background: #fff;
         width: 58px;
         height: 40px;
-        background: #000;
+        margin-right: 32px;
     }
     .paopao-introduce .paopao-logo {
         width: 520px;

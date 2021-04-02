@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="paopao-poster">
-            <div class="h1">奖杯奖牌</div>
+            <div class="h1 scroll-title">奖杯奖牌</div>
             <div class="h4">CERTIFICATE OF HONOR</div>
         </div>
         <div class="paopao-ach">
@@ -21,7 +21,7 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('http://121.196.53.78:8888/web_api/api/common/list', {
+        let res = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/common/list', {
             id: '',
             pageType: 'introduce_4'
         })
@@ -37,6 +37,12 @@ export default {
         return {
             list
         }
+    },
+    mounted(){
+        ScrollReveal().reveal('.scroll-title',{ 
+            duration: 2000,
+            distance: '50px'
+        });
     }
 }
 </script>

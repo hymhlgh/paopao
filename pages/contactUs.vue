@@ -1,12 +1,12 @@
 <template>
     <div class="container">
         <div class="paopao-poster">
-            <div class="h1">联系我们</div>
+            <div class="h1 scroll-title">联系我们</div>
             <div class="h4">CONTACT US</div>
         </div>
         <div class="paopao-contact">
             <div class="contact-item" v-for="(item,index) in list" :key="index">
-                <img class="contact-icon" :src="item.icon" alt="" />
+                <img class="contact-icon scroll-title" :src="item.icon" alt="" />
                 <div>
                     {{item.title}}<br/>
                     {{item.content}}
@@ -20,7 +20,7 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('http://121.196.53.78:8888/web_api/api/common/list', {
+        let res = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/common/list', {
             id: '',
             pageType: 'contact_1'
         })
@@ -36,6 +36,12 @@ export default {
         return {
             list
         }
+    },
+    mounted(){
+        ScrollReveal().reveal('.scroll-title',{ 
+            duration: 2000,
+            distance: '50px'
+        });
     }
 }
 </script>
@@ -44,10 +50,11 @@ export default {
     .paopao-poster {
         width: 100%;
         height: 400px;
-        background: #000000;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        background: url('../assets/img/banner_bg.jpg') no-repeat;
+        background-size: cover;
     }
     .paopao-poster .h1 {
         font-size: 68px;

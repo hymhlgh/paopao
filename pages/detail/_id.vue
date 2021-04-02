@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="paopao-poster">
-            <div class="h1">旗下品牌</div>
+            <div class="h1 scroll-title">旗下品牌</div>
             <div class="h4">BRANDS</div>
         </div>
         <div class="paopao-brand">
@@ -9,7 +9,8 @@
                 {{data.title}}
             </div>
             <div class="brand-img">
-                <img :src="data.logo" alt="" />
+                <img v-if="data.fileType == 1" :src="data.path" alt="" />
+                <video v-if="data.fileType == 2" controls :src="data.path"></video>
             </div>
             <div class="brand-desc">
                 {{data.content}}
@@ -25,7 +26,7 @@ export default {
         console.log(params)
         let id = ''
         // 根据路由pageUrl获取id
-        let res1 = await app.$axios.$post('http://121.196.53.78:8888/web_api/api/brand/nav/list')
+        let res1 = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/brand/nav/list')
         if (res1.code == 200) {
             res1.data.forEach(v => {
                 if (v.pageUrl == params.id) {
@@ -33,7 +34,7 @@ export default {
                 }
             })
         }
-        let res = await app.$axios.$post('http://121.196.53.78:8888/web_api/api/common/list', {
+        let res = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/common/list', {
             id: id || '',
             pageType: ''
         })
@@ -41,13 +42,20 @@ export default {
         if (res.code == 200) {
             let comUrl = "/svc"
             Object.assign(res.data[0], {
-                logo: comUrl + res.data[0].filesList[0].fileUrl,
+                path: comUrl + res.data[0].filesList[0].fileUrl,
+                fileType: res.data[0].filesList[0].fileType
             })
             Object.assign(data, res.data[0])
         }
         return {
             data
         }
+    },
+     mounted(){
+        ScrollReveal().reveal('.scroll-title',{ 
+            duration: 2000,
+            distance: '50px'
+        });
     }
 }
 </script>
@@ -121,6 +129,9 @@ export default {
     .paopao-brand .brand-img img {
         width: 100%;
         display: block;
+    }
+    .paopao-brand .brand-img video {
+        width: 100%;
     }
     .paopao-brand .brand-desc {
         font-size: 16px;

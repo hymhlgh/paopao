@@ -57,7 +57,8 @@
     <div class="mi-ka" v-if="pipiData">
       <h2 class="title scroll-title">{{pipiData.title}}</h2>
       <div class="img-box">
-        <img :src="pipiData.mediaUrl" />
+        <img v-if="pipiData.mediaType == 1" :src="pipiData.mediaUrl" />
+        <video v-if="pipiData.mediaType == 2" controls :src="pipiData.mediaUrl"></video>
       </div>
       <div class="content">
         <p class="dec scroll-title">{{pipiData.content}}</p>
@@ -110,7 +111,7 @@ export default {
     }
   },
   async asyncData({app}){
-    let res = await app.$axios.$post('http://121.196.53.78:8888/web_api/api/home/list')
+    let res = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/home/list')
     let swiperData = {
       conData: [],
       imgData: []
@@ -156,7 +157,8 @@ export default {
             content: item.content,
             pageUrl: item.pageUrl,
             id: item.id,
-            mediaUrl: comUrl + item.filesList[0].fileUrl
+            mediaUrl: comUrl + item.filesList[0].fileUrl,
+            mediaType: item.filesList[0].fileType || 1
           })
         })
       }
@@ -171,7 +173,8 @@ export default {
           id: item.id,
           isOutJoin: item.isOutJoin,
           openType: item.openType,
-          mediaUrl: comUrl + item.filesList[0].fileUrl
+          mediaUrl: comUrl + item.filesList[0].fileUrl,
+          mediaType: item.filesList[0].fileType || 1
         }
       } else if(menuData.length > 0) {
         pipiData = menuData[0]
@@ -205,6 +208,7 @@ export default {
     },
     // 切换菜单
     changMenu(index,item) {
+      console.log(item)
       this.menuIndex = index
       this.pipiData = item
     },
@@ -423,6 +427,10 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.mi-ka .img-box>video{
+  width: 100%;
+  height: 100%;
 }
 .mi-ka .content{
   width: 380px;
