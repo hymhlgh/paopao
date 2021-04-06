@@ -6,7 +6,7 @@
       :key="index"
     >
       <video autoplay muted loop class="video" v-if="item.fileType == 2">
-        <source 
+        <source
           type="video/mp4"
           :src="item.mediaUrl">
       </video>
@@ -24,16 +24,21 @@
         <div class="pao-con">
           <div class="swiper-container swiper-con swiper-container-vertical">
             <div class="swiper-wrapper">
-              <div class="swiper-slide" 
+              <div class="swiper-slide"
                 v-for="(item,index) in swiperData.conData"
                 :key="index"
               >
                 <div class="slide-box">
-                  <h2 class="title">{{item.title}}</h2>
-                  <p class="dec">
+                  <div class="title-box">
+                    <h2 :class="['title',spIndex == index ? 'dong-title':'']">{{item.title}}</h2>
+                  </div>
+                  <p :class="['dec',spIndex == index ? 'dong-dec':'']">
                    {{item.content}}
                   </p>
-                  <div class="pao-btn" @click="gotoPage(item)" target="_blank">CLICK HERE
+                  <div
+                    :class="['pao-btn',spIndex == index ? 'dong-pao-btn':'']"
+                    @click="gotoPage(item)"
+                    target="_blank">CLICK HERE
                     <img src="~/assets/img/jthei.png" />
                   </div>
                 </div>
@@ -45,13 +50,26 @@
         <div class="img-box">
           <div class="swiper-container swiper-img">
             <div class="swiper-wrapper">
-                <div class="swiper-slide"  v-for="(item,index) in swiperData.imgData"
+                <div class="swiper-slide swiper-slide-img-box"  v-for="(item,index) in swiperData.imgData"
                 :key="index">
-                  <img :src="item" />
+                  <div
+                    :class="['swiper-box-img',spIndex == index ? 'dong-swiper-box-img':'']"
+                    class="swiper-box-img">
+                     <img :src="item" />
+                  </div>
                 </div>
             </div>
           </div>
         </div>
+       <!--自定义圈圈-->
+       <div class="quan-box">
+         <div
+          :class="['quan-item',spIndex == index ? 'quan-item-active':'']"
+          v-for="(item,index) in swiperData.conData"
+          :key="index"
+          @click="hanldSwiper(index)"
+         ></div>
+       </div>
     </div>
     <!--跑跑米卡-->
     <div class="mi-ka" v-if="pipiData">
@@ -65,22 +83,16 @@
         <div class="con-btn" @click="gotoPage(pipiData)">CLICK HERE
           <img src="~/assets/img/jiantou.png" />
         </div>
-        <!-- <nuxt-link 
-          class="con-btn"
-          :to="{name: 'detail-id', params: {id: pipiData.pageUrl}}"
-        >CLICK HERE
-          <img src="~/assets/img/jiantou.png" />
-        </nuxt-link> -->
       </div>
     </div>
-    <img 
+    <img
        v-if="iconShow"
       @click.stop.prevent="menuOpenMe(1)"
-      class="menu-open" 
+      class="menu-open"
       src="~/assets/img/right.png" />
     <!--悬浮菜单-->
     <ul :class="menuPiShow">
-      <li 
+      <li
         :class="['menu-item',index == menuIndex ? 'menu-active' : '']"
         v-for="(item,index) in menuData"
         :key="index"
@@ -89,23 +101,25 @@
       <img
         v-if="!iconShow"
         @click="menuOpenMe(0)"
-        class="menu-open-child" 
+        class="menu-open-child"
         src="~/assets/img/left.png" />
     </ul>
   </div>
-  
+
 </template>
 
 <script>
 import AppLogo from '~/components/AppLogo.vue';
-
+var mySwiperCon = null;
+var mySwiperImg = null;
 export default {
   components: {
     AppLogo
   },
   data () {
     return {
-      menuIndex: 0,
+      menuIndex: 0, // 悬浮菜单
+      spIndex: 0, // 轮播
       menuPiShow: 'menu-piao',
       iconShow: true
     }
@@ -120,7 +134,7 @@ export default {
     let menuData =[]
     let pipiData = null
     // 域名
-    // let comUrl = "http://121.196.53.78:8888/svc"
+    // let comUrl = "http://121.196.17.191:8002/svc"
     let comUrl = "/svc"
     if (res.code == 200) {
       // banner
@@ -188,7 +202,17 @@ export default {
     }
   },
   methods: {
+    hanldSwiper(index){
+      if (index == this.spIndex) {
+        return false
+      }
+      mySwiperImg.slideTo(index+1)
+      this.spIndex == index
+    },
     gotoPage(item){
+      if (item.pageUrl == "" || item.pageUrl == null) {
+        return false;
+      }
       if (item.isOutJoin) { // 外链
         window.open(item.pageUrl);
       } else {
@@ -214,17 +238,27 @@ export default {
     },
     // 轮播部分
     initSwiper(){
-      var delay = 4000;
-      var mySwiperCon = new Swiper ('.swiper-con', {
+      var delay = 5000;
+      var swiperConLength = this.swiperData.conData.length;
+      mySwiperCon = new Swiper ('.swiper-con', {
         direction: 'vertical',
         loop: true, // 循环模式选项
-        speed:800,
+        speed:400,
         autoplay : {
           delay
-        }
+        },
+        on: {
+          slideChangeTransitionEnd: (swiper)=>{
+            if (mySwiperCon) {
+              let index = mySwiperCon.activeIndex
+              this.spIndex = (index > swiperConLength) ? 0 : (index - 1);
+            }
+
+          },
+        },
       })
 
-      var mySwiperImg = new Swiper ('.swiper-img', {
+      mySwiperImg = new Swiper ('.swiper-img', {
         direction: 'horizontal',
         loop: true, // 循环模式选项
         speed:800,
@@ -232,23 +266,21 @@ export default {
           control: mySwiperCon
         }
       })
-      console.log(mySwiperCon)
       mySwiperCon.controller.control = mySwiperImg
       mySwiperImg.controller.control = mySwiperCon
     }
   },
   mounted() {
-    //this.$axios.$post('/api/home/list')
     this.initSwiper();
 
-    ScrollReveal().reveal('.scroll-title',{ 
+    ScrollReveal().reveal('.scroll-title',{
       duration: 2000,
       distance: '50px'
     });
 
     ScrollReveal().reveal('.swiper-title',{
       distance: '50px',
-     
+
     })
   }
 }
@@ -324,14 +356,37 @@ export default {
   margin: 50px auto;
   display: flex;
   align-items: center;
+  position: relative;
 }
 .pao-swiper .img-box{
   width: 540px;
   height: 600px;
 }
-.swiper-img{
+.swiper-img .swiper-box-img{
   width: 540px;
   height: 600px;
+  overflow: hidden;
+  position: relative;
+}
+/* @keyframes dongImg{
+  0%{right: 0%;}
+  20%{right: 100%;}
+  100%{right: 100%;}
+}
+.dong-swiper-box-img::after{
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255,255,255,0.8);
+  position: absolute;
+  top: 0;
+  right: 0;
+  animation: dongImg 5s linear 0.2s 1 alternate;
+} */
+.swiper-box-img>img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .swiper-con{
   width: 420px;
@@ -358,12 +413,21 @@ export default {
   flex-wrap: wrap;
   align-content: center; */
 }
+.title-box{
+  background-color: #fff;
+  position: relative;
+  top: 30px;
+}
 .pao-swiper .pao-con .title{
   font-size: 36px;
   line-height: 50px;
   letter-spacing: 2px;
   font-weight: 600;
   margin: 0;
+  position: relative;
+  overflow: hidden;
+  z-index: -1;
+
 }
 .pao-swiper .pao-con .dec{
   margin-top: 30px;
@@ -371,17 +435,62 @@ export default {
   font-size: 18px;
   line-height: 26px;
   letter-spacing: 1px;
+  opacity: 0;
+  position: relative;
 }
 .pao-swiper .pao-con .pao-btn{
   font-size: 14px;
   color: #505050;
   line-height: 20px;
   cursor: pointer;
+  position: relative;
+  opacity: 0;
 }
 .pao-swiper .pao-con .pao-btn>img{
   position: relative;
   top: 5px;
   left: 10px;
+}
+
+.quan-box{
+  position: absolute;
+  left: 60px;
+  bottom: 2px;
+  display: flex;
+}
+.quan-item{
+  width: 6px;
+  height: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  margin-right: 5px;
+  border-radius: 100%;
+  cursor: pointer;
+  z-index: 99;
+}
+.quan-item-active{
+  background: rgba(0, 0, 0, 0.6);
+}
+@keyframes dongTitle{
+  0%{top: -20%;opacity: 0;}
+  12%{top: -100%;opacity: 1;}
+  88%{top: -100%;opacity: 1;}
+  100%{top: -20%;opacity: 0;}
+}
+@keyframes dongDec{
+  0%{top: 30px;opacity: 0;}
+  12%{top: -15px;opacity: 1;}
+  88%{top: -15px;opacity: 1;}
+  100%{top: 30px;opacity: 0;}
+}
+
+.dong-title{
+ animation: dongTitle 5s linear 0.2s 1 forwards;
+}
+.dong-dec{
+  animation: dongDec 4.4s linear 0.6s 1 forwards;
+}
+.dong-pao-btn{
+  animation: dongDec 3.8s linear 1s 1 forwards;
 }
 
 /* 跑跑米卡*/
@@ -513,4 +622,3 @@ export default {
   border:solid 1px #F2DB00;
 }
 </style>
-

@@ -51,7 +51,7 @@ export default {
   width: 100%;
   height: 80px;
   background: rgba(0, 0, 0, .8);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 2;
@@ -77,6 +77,23 @@ export default {
   height: 100%;
   display: inline-block;
   position: relative;
+}
+.nav-box .nav-item>a::before {
+  content: "";
+  width: 0%;
+  height: 4px;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  background-color: #BD0000;
+  transition:all .4s;
+  -moz-transition:all .4s;
+  -webkit-transition:all .4s;
+  -o-transition:all .4s;
+}
+.nav-box .nav-item:hover>a::before {
+  width: 100%;
 }
 .nav-box .nav-item > a{
   display: block;
@@ -122,7 +139,7 @@ export default {
   padding: 0 10px;
   box-sizing: border-box;
 }
-.two-menu .two-menu-item:hover a {
+.two-menu .two-menu-item:hover a{
   color: #F2DB00;
 }
 .two-menu .two-menu-item a {
@@ -131,4 +148,5 @@ export default {
 .two-menu .two-menu-active {
   background: #E02020;  
 }
+
 </style>

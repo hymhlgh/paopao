@@ -7,7 +7,7 @@
         <div class="paopao-section1">
             <div class="paopao-box">
                 <div class="brand-name">
-                    {{brand_diy1[0].title}}                    
+                    {{brand_diy1[0].title}}
                 </div>
                 <div class="brand-desc">
                     {{brand_diy1[0].content}}
@@ -19,7 +19,7 @@
                 <video class="ed-video" v-if="brand_diy1[0].fileType == 2" controls :src="brand_diy1[0].path"></video>
             </div>
         </div>
-        <div class="paopao-section2" :style="'background: url(' +  brand_diy2_2[0].logo + ') no-repeat;'">
+        <div class="paopao-section2" :style="'background: url(' +  brand_diy2_1[0].logo + ') no-repeat;background-size: cover;'">
             <img :src="brand_diy2_2[0].logo" alt="">
         </div>
         <div class="paopao-section3">
@@ -38,7 +38,7 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('http://121.196.53.78:8001/api/brand/diy/list')
+        let res = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/brand/diy/list')
         if (res.code == 200) {
             let comUrl = "/svc"
             res.data.brand_diy1.forEach(v => {
@@ -75,7 +75,7 @@ export default {
         }
     },
     mounted(){
-        ScrollReveal().reveal('.scroll-title',{ 
+        ScrollReveal().reveal('.scroll-title',{
             duration: 2000,
             distance: '50px'
         });
@@ -200,8 +200,7 @@ export default {
         background: #000;
         margin-top: 212px;
         position: relative;
-        background-size: cover;
-    } 
+    }
     .paopao-section2 img {
         width: 740px;
         height: 400px;
@@ -216,7 +215,7 @@ export default {
         margin-bottom: 100px;
         margin-left: auto;
         margin-right: auto;
-    } 
+    }
     .paopao-section3 .advantage-item {
         display: flex;
         margin-bottom: 46px;

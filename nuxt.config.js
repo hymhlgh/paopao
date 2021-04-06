@@ -11,10 +11,10 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet',type: 'text/css', href: 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/css/swiper.css'}
+      { rel: 'stylesheet',type: 'text/css', href: '/swiper/swiper.min.css'}
     ],
     script: [
-      { src: 'https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.2/js/swiper.js'},
+      { src: '/swiper/swiper.min.js'},
       { src: 'https://unpkg.com/scrollreveal'}
     ]
   },
@@ -72,4 +72,3 @@ module.exports = {
     }
   }
 }
-
