@@ -125,7 +125,7 @@ export default {
     }
   },
   async asyncData({app}){
-    let res = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/home/list')
+    let res = await app.$axios.$post('http://124.222.155.186:8081/web_api/api/home/list')
     let swiperData = {
       conData: [],
       imgData: []
@@ -134,7 +134,7 @@ export default {
     let menuData =[]
     let pipiData = null
     // 域名
-    // let comUrl = "http://121.196.17.191:8002/svc"
+    // let comUrl = "http://124.222.155.186:8081/svc"
     let comUrl = "/svc"
     if (res.code == 200) {
       // banner

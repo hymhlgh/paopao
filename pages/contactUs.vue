@@ -20,7 +20,7 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('http://121.196.17.191:8002/web_api/api/common/list', {
+        let res = await app.$axios.$post('http://124.222.155.186:8081/web_api/api/common/list', {
             id: '',
             pageType: 'contact_1'
         })
