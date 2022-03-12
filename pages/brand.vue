@@ -38,7 +38,7 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('http://124.222.155.186:8081/web_api/api/brand/diy/list')
+        let res = await app.$axios.$post('http://124.222.155.186:8081/api/brand/diy/list')
         if (res.code == 200) {
             let comUrl = "/svc"
             res.data.brand_diy1.forEach(v => {

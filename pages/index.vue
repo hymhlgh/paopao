@@ -125,7 +125,7 @@ export default {
     }
   },
   async asyncData({app}){
-    let res = await app.$axios.$post('http://124.222.155.186:8081/web_api/api/home/list')
+    let res = await app.$axios.$post('http://124.222.155.186:8081/api/home/list')
     let swiperData = {
       conData: [],
       imgData: []

@@ -21,7 +21,7 @@
 
 export default {
     async asyncData ({app}) {
-        let res = await app.$axios.$post('http://124.222.155.186:8081/web_api/api/common/list', {
+        let res = await app.$axios.$post('http://124.222.155.186:8081/api/common/list', {
             id: '',
             pageType: 'introduce_4'
         })
