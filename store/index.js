@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import axios from "axios";
 
 Vue.use(Vuex);
 
@@ -20,9 +19,7 @@ const getters = {};
 const actions = {
   async nuxtServerInit({ commit }, { app }) {
     //品牌导航
-    let res = await app.$axios.$post(
-      "http://124.222.155.186:8081/api/brand/nav/list"
-    );
+    let res = await app.$api.article.brandNavList();
     commit("setBrandNav", res.data);
   }
 };

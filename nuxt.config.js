@@ -29,29 +29,34 @@ module.exports = {
   loading: { color: "#3B8070" },
   modules: ["@nuxtjs/axios", "@nuxtjs/proxy"],
   // axios配置
-  // axios: {
-  //   // See https://github.com/nuxt-community/axios-module#options
-  //   proxy: true, // 表示开启代理
-  //   prefix: '/api', // 表示给请求url加个前缀 /api
-  //   credentials: true, // 表示跨域请求时是否需要使用凭证
-  //   basePath: 'http://124.222.155.186:8081'
-  // },
+  axios: {
+    // See https://github.com/nuxt-community/axios-module#options
+    proxy: true, // 表示开启代理
+    prefix: "/web_api/" // 表示给请求url加个前缀 /api
+    // // credentials: true, // 表示跨域请求时是否需要使用凭证
+    // basePath: "http://10.11.0.233:3000"
+  },
   // 本地代理配置
-  // proxy: {
-  //   '/api': {
-  //       target: 'http://124.222.155.186:8081', // 目标接口域名
-  //       changeOrigin: true, // 表示是否跨域
-  //       pathRewrite: {
-  //         '^/api': '', // 把 /api 替换成‘’
-  //       }
-  //   }
-  // },
   proxy: {
-    "/web_api": "http://124.222.155.186:8081"
+    "/web_api": {
+      target: "http://124.222.155.186:8081/", // 目标接口域名
+      pathRewrite: {
+        "^/web_api": "", // 把 /api 替换成‘’
+        changeOrigin: true // 表示是否跨域
+      }
+    },
+    "/svc": {
+      target: "http://124.222.155.186:3001/", // 目标接口域名
+      pathRewrite: {
+        "^/svc": "/svc", // 把 /api 替换成‘’
+        changeOrigin: true // 表示是否跨域
+      }
+    }
   },
-  env: {
-    baseUrl: "http://124.222.155.186:8081"
-  },
+  // server: {
+  //   host: "0.0.0.0",
+  //   port: 3000
+  // },
   /*
    ** Build configuration
    */

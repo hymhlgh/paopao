@@ -25,7 +25,6 @@ export default {
   },
   methods: {
     gotoPage(url){
-      console.log(url)
       this.$router.push({path: url})
     }
   }
