@@ -136,7 +136,8 @@ export default {
       menuIndex: 0, // 悬浮菜单
       spIndex: 0, // 轮播
       menuPiShow: "menu-piao",
-      iconShow: true
+      iconShow: true,
+      isclickhere: false
     };
   },
   async asyncData({ app }) {
@@ -192,7 +193,8 @@ export default {
         });
       }
 
-      let diy1 = res.data.brand_diy1;
+      // let diy1 = res.data.brand_diy1;
+      let diy1 = res.data.brand_1;
       if (diy1.length > 0) {
         let item = diy1[0];
         pipiData = {
@@ -225,17 +227,41 @@ export default {
       this.spIndex == index;
     },
     gotoPage(item) {
+      if (item.openType == 0) return;
       if (item.pageUrl == "" || item.pageUrl == null) {
         return false;
       }
       if (item.isOutJoin) {
         // 外链
-        window.open(item.pageUrl);
+        switch (item.openType) {
+          case 1:
+            window.location.href = item.pageUrl;
+            break;
+          case 2:
+            window.open(item.pageUrl);
+            break;
+          default:
+            window.open(item.pageUrl);
+            break;
+        }
       } else {
-        this.$router.push({
-          path: `/detail/${item.pageUrl}`
-        });
+        switch (item.openType) {
+          case 1:
+            this.$router.push({
+              path: `/detail/${item.pageUrl}`
+            });
+            break;
+          case 2:
+            window.open(item.pageUrl);
+            break;
+          default:
+            this.$router.push({
+              path: `/detail/${item.pageUrl}`
+            });
+            break;
+        }
       }
+      // this.initSwiper();
     },
     menuOpenMe(type) {
       if (type == 1) {
@@ -248,6 +274,7 @@ export default {
     },
     // 切换菜单
     changMenu(index, item) {
+      window.scrollTo(0, window.document.querySelector(".home").clientHeight);
       this.menuIndex = index;
       this.pipiData = item;
     },
@@ -258,7 +285,7 @@ export default {
       mySwiperCon = new Swiper(".swiper-con", {
         direction: "vertical",
         loop: true, // 循环模式选项
-        speed: 400,
+        speed: 600,
         autoplay: {
           delay
         },
@@ -271,7 +298,6 @@ export default {
           }
         }
       });
-
       mySwiperImg = new Swiper(".swiper-img", {
         direction: "horizontal",
         loop: true, // 循环模式选项
@@ -286,7 +312,6 @@ export default {
   },
   mounted() {
     this.initSwiper();
-
     ScrollReveal().reveal(".scroll-title", {
       duration: 2000,
       distance: "50px"
@@ -630,7 +655,7 @@ export default {
   padding: 30px;
   padding-left: 150px;
   max-width: 800px;
-  min-height: 340px;
+  /* min-height: 340px; */
   display: flex;
   flex-wrap: wrap;
   transition: all 0.5s;
@@ -647,7 +672,7 @@ export default {
 }
 .menu-piao .menu-item {
   display: block;
-  width: 150px;
+  /* width: 150px; */
   margin: 10px 20px;
   box-sizing: border-box;
   padding: 5px;
